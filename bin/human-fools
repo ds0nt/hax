@@ -1,0 +1,34 @@
+#!/bin/bash
+
+quiptoken="UmVlQU1BWGh6QmQ=|1470115736|SdtQMKJViZWr2LWXWyajwNFIxmcaLqJ6if289R0SQaU="
+
+file=$HOME/human-fools
+
+failure() {
+  echo "failure";
+  exit 1;
+}
+
+# quip me
+if [ ! -f $file ]; then
+  id=`curl https://platform.quip.com/1/threads/new-document \
+      -d "content=#$(hostname)" \
+      -d "format=markdown" \
+      -H "Authorization: Bearer $quiptoken" \
+      | grep -oE '"id"\:".*"' | grep -wEo '[^"id":]*'`;
+
+  echo $id > $file;
+  echo "http://quip.com/$id created";
+else
+  id=`cat $file`;
+fi
+
+echo -n "human-$USER: please summarize your activities: "
+read answer
+
+win=`curl https://platform.quip.com/1/threads/edit-document \
+    -d "thread_id=$id" \
+    -d "content=<p>$answer</p>" \
+    -H "Authorization: Bearer $quiptoken" `;
+
+echo "http://quip.com/$id edited";

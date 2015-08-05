@@ -1,0 +1,12 @@
+#!/bin/bash
+
+jstr=$1
+x=''
+
+while shift; do
+  [ "$1" = "" ] ||  x+="import $1 from '$1';"
+done
+
+babel-node -ep "$x; $jstr"
+
+oo

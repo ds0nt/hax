@@ -1,0 +1,17 @@
+#!/bin/bash
+
+FOLDER=$1
+[[ $FOLDER ]] || FOLDER=/github
+echo "Cloning into $FOLDER"
+# clipboard contents
+url=`xclip -o`
+repo=`echo "$url" | sed -r 's/^.*github\.com[/](.*\/[^.]*).*$/\1/'`
+
+[[ "`echo $url | grep -o github`" != "github" ]] && echo "'$url' is not a valid repo" >&2 && exit 1
+
+echo "cloning from $url"
+
+# slug=owner/repo
+echo $slug
+git clone $url $slug
+

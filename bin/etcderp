@@ -1,0 +1,31 @@
+#!/bin/babel-node
+
+import assert from 'assert'
+import etcd from 'nodejs-etcd'
+
+
+function fail(reason) {
+  console.error(reason)
+  process.exit()
+}
+let options =  {
+  url: 'http://ds0nt.com:4001',
+  auth: {
+    user: 'dsont',
+    pass: '123qweasd',
+  }
+}
+
+let client = new etcd(options)
+
+let [ x, y, key, val ] = process.argv
+
+try {
+  client.read({'key':key}, function(err,result,body){
+    if (err) 
+      return console.error(err)
+    console.log(result)
+  })
+} catch (e) {
+  fail(e)
+}
